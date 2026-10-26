@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Muestra Completa de Etiquetas EJS</title>
+    </head>
+
+    <body>
+        <!-- ===================================================================== -->
+        <!-- 1. COMPARATIVA DE COMENTARIOS (HTML vs EJS vs JS)                     -->
+        <!-- Todos se ven exactamente con el mismo color de comentario del tema    -->
+        <!-- ===================================================================== -->
+
+        <!-- Comentario HTML estándar: enviado en el código fuente al navegador -->
+        <%# Comentario de servidor EJS: oculto al navegador, mismo color que el de HTML %>
+        <%#
+            Comentario EJS multilínea:
+            Conserva el color de comentario tanto en <%# como en el texto y en %>
+        -%>
+
+        <main>
+            <!-- ================================================================= -->
+            <!-- 2. SALIDA ESCAPADA (<%= ... %>) vs '=' OLVIDADO (<% ... %>)       -->
+            <!--    - Con '=': <% en Verde Lima + '=' y '%>' en Cian Brillante     -->
+            <!--    - Sin '=' (error típico): Se ilumina en ROJO SUBRAYADO         -->
+            <!-- ================================================================= -->
+            <div class="comparativa-error">
+                <p><strong>Duración (Correcto con =):</strong> <span><%= pelicula.Runtime %></span></p>
+                <p><strong>Género (ERROR: falta el =):</strong> <span><% pelicula.Genre %></span></p>
+                <p><strong>Director (Correcto con =):</strong> <span><%= pelicula.Director %></span></p>
+            </div>
+
+            <!-- ================================================================= -->
+            <!-- 3. SALIDA EN ATRIBUTOS HTML (<%= ... %>)                          -->
+            <!-- ================================================================= -->
+            <h1>Resultados para: <%= filmSearch %></h1>
+            <img class="film-poster" src="<%= pelicula.Poster %>" alt="Póster de <%= pelicula.Title %>" />
+
+            <!-- ================================================================= -->
+            <!-- 4. SALIDA SIN ESCAPAR / RAW HTML (<%- ... %>)                     -->
+            <!--    - <% en Verde Lima + '-' y '%>' en Naranja Ámbar (#fb923c)     -->
+            <!-- ================================================================= -->
+            <%- include('partials/header', { titulo: 'Catálogo' }) %>
+            <div class="raw-html"><%- pelicula.HtmlDescription %></div>
+
+            <!-- ================================================================= -->
+            <!-- 5. SCRIPTLETS DE CONTROL (<% ... %>)                              -->
+            <!--    - Apertura <% y cierre %> ambos en Verde Lima (#a3e635)        -->
+            <!-- ================================================================= -->
+            <% if (peliculas.length > 0) { %>
+                <% peliculas.forEach(function(pelicula, index) { %>
+                    <article class="film-card" data-index="<%= index %>">
+                        <h2><%= pelicula.Title %> (<%= pelicula.Year %>)</h2>
+                    </article>
+                <% }) %>
+            <% } else { %>
+                <p>No se encontraron películas.</p>
+            <% } %>
+
+            <!-- ================================================================= -->
+            <!-- 6. RECORTE DE ESPACIOS (<%_ ... _%> y -%>)                        -->
+            <!--    - <% y %> en Verde Lima + '_' y '-' en Amarillo (#fde047)      -->
+            <!-- ================================================================= -->
+            <%_ const total = peliculas.length; _%>
+            <% if (total === 1) { -%>
+                <p>Se encontró exactamente 1 película.</p>
+            <% } -%>
+
+            <!-- ================================================================= -->
+            <!-- 7. ETIQUETAS LITERALES ESCAPADAS (<%% y %%>) -> Violeta/Lavanda   -->
+            <!-- ================================================================= -->
+            <p>Para imprimir una variable en EJS se escribe: <code><%%= nombreVariable %%></code></p>
+
+            <!-- ================================================================= -->
+            <!-- 8. SCRIPTLET MULTILÍNEA CON COMENTARIOS JS INTERNOS               -->
+            <!-- ================================================================= -->
+            <%
+                // Comentario de una línea en JS dentro de EJS
+                /* Comentario de bloque en JS dentro de EJS */
+                const valoracionMedia = 8.5;
+                const esDestacada = valoracionMedia >= 8.0;
+            %>
+        </main>
+    </body>
+</html>

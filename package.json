@@ -1,0 +1,124 @@
+{
+  "name": "ejs-smart-colorizer",
+  "displayName": "EJS Smart Colorizer",
+  "description": "Coloreador avanzado de etiquetas EJS para VS Code con diferenciación entre salida (<%=) y control (<%), detector de '=' olvidado (<% pelicula.Genre %>), comentarios unificados con HTML/JS y snippets.",
+  "version": "1.0.0",
+  "publisher": "fsolaje-tools",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "contributes": {
+    "grammars": [
+      {
+        "scopeName": "text.html.ejs.smart",
+        "path": "./syntaxes/ejs.tmLanguage.json",
+        "injectTo": [
+          "text.html.basic"
+        ]
+      }
+    ],
+    "snippets": [
+      {
+        "language": "html",
+        "path": "./snippets/ejs.json"
+      },
+      {
+        "language": "ejs",
+        "path": "./snippets/ejs.json"
+      }
+    ],
+    "configurationDefaults": {
+      "files.associations": {
+        "*.ejs": "html"
+      },
+      "emmet.includeLanguages": {
+        "ejs": "html"
+      },
+      "editor.tokenColorCustomizations": {
+        "textMateRules": [
+          {
+            "name": "EJS: Apertura <% siempre en Verde Lima",
+            "scope": [
+              "punctuation.section.embedded.begin.output.ejs",
+              "punctuation.section.embedded.begin.scriptlet.ejs"
+            ],
+            "settings": {
+              "foreground": "#a3e635",
+              "fontStyle": "bold"
+            }
+          },
+          {
+            "name": "EJS: Cierre %> de Scriptlet de control (<% ... %>) en Verde Lima",
+            "scope": [
+              "punctuation.section.embedded.end.scriptlet.ejs"
+            ],
+            "settings": {
+              "foreground": "#a3e635",
+              "fontStyle": "bold"
+            }
+          },
+          {
+            "name": "EJS: 3er carácter '=' y cierre '%>' de Salida Escapada (<%= ... %>) en Cian Brillante",
+            "scope": [
+              "keyword.operator.output.escaped.ejs",
+              "punctuation.section.embedded.end.output.escaped.ejs"
+            ],
+            "settings": {
+              "foreground": "#00f5d4",
+              "fontStyle": "bold"
+            }
+          },
+          {
+            "name": "EJS: 3er carácter '-' y cierre '%>' de Salida Sin Escapar (<%- ... %>) en Naranja Ámbar",
+            "scope": [
+              "keyword.operator.output.unescaped.ejs",
+              "punctuation.section.embedded.end.output.unescaped.ejs"
+            ],
+            "settings": {
+              "foreground": "#fb923c",
+              "fontStyle": "bold"
+            }
+          },
+          {
+            "name": "EJS: 3er carácter '_' y '-' de Recorte de Espacio (<%_, _%>, -%>) en Amarillo",
+            "scope": [
+              "keyword.operator.whitespace.slurp.ejs",
+              "keyword.operator.whitespace.trim.ejs"
+            ],
+            "settings": {
+              "foreground": "#fde047",
+              "fontStyle": "bold"
+            }
+          },
+          {
+            "name": "EJS: ALERTA de '=' olvidado (ej. <% pelicula.Genre %>) en Rojo Subrayado",
+            "scope": [
+              "invalid.illegal.missing-equals.begin.ejs",
+              "invalid.illegal.missing-equals.end.ejs",
+              "variable.other.missing-equals.ejs"
+            ],
+            "settings": {
+              "foreground": "#ff4757",
+              "fontStyle": "bold underline"
+            }
+          },
+          {
+            "name": "EJS: Delimitadores literales escapados (<%% y %%>)",
+            "scope": [
+              "constant.character.escape.ejs"
+            ],
+            "settings": {
+              "foreground": "#c084fc",
+              "fontStyle": "bold"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

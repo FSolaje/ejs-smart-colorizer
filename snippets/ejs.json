@@ -1,0 +1,81 @@
+{
+  "EJS Scriptlet (<% %>)": {
+    "prefix": "ejs",
+    "body": "<% $1 %>$0",
+    "description": "Etiqueta EJS de código JavaScript sin salida HTML"
+  },
+  "EJS Output Escaped (<%= %>)": {
+    "prefix": "ejsout",
+    "body": "<%= $1 %>$0",
+    "description": "Etiqueta EJS que imprime el valor escapando HTML"
+  },
+  "EJS Output Unescaped (<%- %>)": {
+    "prefix": "ejsesc",
+    "body": "<%- $1 %>$0",
+    "description": "Etiqueta EJS que imprime HTML crudo sin escapar"
+  },
+  "EJS Comment (<%# %>)": {
+    "prefix": "ejscom",
+    "body": "<%# $1 %>$0",
+    "description": "Comentario de servidor EJS (no se envía al navegador)"
+  },
+  "EJS Literal (<%% %%)": {
+    "prefix": "ejslit",
+    "body": "<%% $1 %%>",
+    "description": "Imprime literalmente los delimitadores <% %>"
+  },
+  "EJS Include": {
+    "prefix": "ejsinc",
+    "body": "<%- include('${1:partials/header}', { ${2:data} }) %>$0",
+    "description": "Incluir otra vista parcial EJS"
+  },
+  "EJS If Block": {
+    "prefix": "ejsif",
+    "body": [
+      "<% if (${1:condicion}) { %>",
+      "\t$0",
+      "<% } %>"
+    ],
+    "description": "Bloque condicional if en EJS"
+  },
+  "EJS If-Else Block": {
+    "prefix": "ejsifelse",
+    "body": [
+      "<% if (${1:condicion}) { %>",
+      "\t$2",
+      "<% } else { %>",
+      "\t$0",
+      "<% } %>"
+    ],
+    "description": "Bloque condicional if / else completo en EJS"
+  },
+  "EJS Else-If": {
+    "prefix": "ejselif",
+    "body": "<% } else if (${1:condicion}) { %>",
+    "description": "Rama intermedia else if en EJS"
+  },
+  "EJS Else": {
+    "prefix": "ejselse",
+    "body": "<% } else { %>",
+    "description": "Rama else en EJS"
+  },
+  "EJS ForEach Loop": {
+    "prefix": "ejseach",
+    "body": [
+      "<% ${1:array}.forEach(function(${2:item}) { %>",
+      "\t$0",
+      "<% }) %>"
+    ],
+    "description": "Bucle forEach en EJS"
+  },
+  "EJS For Loop": {
+    "prefix": "ejsfor",
+    "body": [
+      "<% for (let ${1:i} = 0; ${1:i} < ${2:array}.length; ${1:i}++) { %>",
+      "\t$0",
+      "<% } %>"
+    ],
+    "description": "Bucle for clásico en EJS"
+  }
+}
+
