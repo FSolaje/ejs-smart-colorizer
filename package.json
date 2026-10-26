@@ -1,8 +1,8 @@
 {
   "name": "ejs-smart-colorizer",
   "displayName": "EJS Smart Colorizer",
-  "description": "Coloreador avanzado de etiquetas EJS para VS Code con diferenciación entre salida (<%=) y control (<%), detector de '=' olvidado (<% pelicula.Genre %>), comentarios unificados con HTML/JS y snippets.",
-  "version": "1.1.0",
+  "description": "Coloreador avanzado de etiquetas EJS para VS Code: salida (<%=) en Verde Lima + Cian, estructuras de control (<%) en Amarillo, detector de '=' olvidado en Rojo, comentarios unificados con HTML/JS y snippets.",
+  "version": "1.2.0",
   "publisher": "fsolaje-tools",
   "license": "MIT",
   "engines": {
@@ -54,10 +54,11 @@
       "editor.tokenColorCustomizations": {
         "textMateRules": [
           {
-            "name": "EJS: Apertura <% siempre en Verde Lima",
+            "name": "EJS: Apertura <% y cierre %> de etiquetas de SALIDA (<%= y <%-) en Verde Lima",
             "scope": [
               "punctuation.section.embedded.begin.output.ejs",
-              "punctuation.section.embedded.begin.scriptlet.ejs"
+              "punctuation.section.embedded.end.output.escaped.ejs",
+              "punctuation.section.embedded.end.output.unescaped.ejs"
             ],
             "settings": {
               "foreground": "#a3e635",
@@ -65,20 +66,20 @@
             }
           },
           {
-            "name": "EJS: Cierre %> de Scriptlet de control (<% ... %>) en Verde Lima",
+            "name": "EJS: Apertura <% y cierre %> de ESTRUCTURAS DE CONTROL (<% ... %>) en Amarillo",
             "scope": [
+              "punctuation.section.embedded.begin.scriptlet.ejs",
               "punctuation.section.embedded.end.scriptlet.ejs"
             ],
             "settings": {
-              "foreground": "#a3e635",
+              "foreground": "#ffea00",
               "fontStyle": "bold"
             }
           },
           {
-            "name": "EJS: 3er carácter '=' y cierre '%>' de Salida Escapada (<%= ... %>) en Cian Brillante",
+            "name": "EJS: Símbolo complementario '=' en Salida Escapada (<%=) en Cian Brillante",
             "scope": [
-              "keyword.operator.output.escaped.ejs",
-              "punctuation.section.embedded.end.output.escaped.ejs"
+              "keyword.operator.output.escaped.ejs"
             ],
             "settings": {
               "foreground": "#00f5d4",
@@ -86,10 +87,9 @@
             }
           },
           {
-            "name": "EJS: 3er carácter '-' y cierre '%>' de Salida Sin Escapar (<%- ... %>) en Naranja Ámbar",
+            "name": "EJS: Símbolo complementario '-' en Salida Sin Escapar (<%-) en Naranja Ámbar",
             "scope": [
-              "keyword.operator.output.unescaped.ejs",
-              "punctuation.section.embedded.end.output.unescaped.ejs"
+              "keyword.operator.output.unescaped.ejs"
             ],
             "settings": {
               "foreground": "#fb923c",
@@ -97,13 +97,13 @@
             }
           },
           {
-            "name": "EJS: 3er carácter '_' y '-' de Recorte de Espacio (<%_, _%>, -%>) en Amarillo",
+            "name": "EJS: Símbolos complementarios '_' y '-' de Recorte de Espacio (<%_, _%>, -%>) en Cian Brillante",
             "scope": [
               "keyword.operator.whitespace.slurp.ejs",
               "keyword.operator.whitespace.trim.ejs"
             ],
             "settings": {
-              "foreground": "#fde047",
+              "foreground": "#00f5d4",
               "fontStyle": "bold"
             }
           },
