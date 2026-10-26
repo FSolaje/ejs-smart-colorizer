@@ -1,8 +1,8 @@
 {
   "name": "ejs-smart-colorizer",
   "displayName": "EJS Smart Colorizer",
-  "description": "Coloreador avanzado de etiquetas EJS para VS Code: salida (<%=) en Verde Lima + Cian, estructuras de control (<%) en Amarillo, detector de '=' olvidado en Rojo, comentarios unificados con HTML/JS y snippets.",
-  "version": "1.2.0",
+  "description": "Coloreador avanzado de etiquetas EJS para VS Code: salida (<%=) en Verde Lima + Cian, estructuras de control (<%) en Amarillo, detector completo de errores de uso en Rojo Subrayado, comentarios unificados con HTML/JS y snippets.",
+  "version": "1.3.0",
   "publisher": "fsolaje-tools",
   "license": "MIT",
   "engines": {
@@ -108,11 +108,19 @@
             }
           },
           {
-            "name": "EJS: ALERTA de '=' olvidado (ej. <% pelicula.Genre %>) en Rojo Subrayado",
+            "name": "EJS: ALERTA de uso incorrecto o error sintáctico en cualquier etiqueta EJS",
             "scope": [
+              "invalid.illegal.double-open.ejs",
+              "invalid.illegal.invalid-modifier.ejs",
+              "invalid.illegal.empty-tag.ejs",
+              "invalid.illegal.nested-comment.ejs",
+              "invalid.illegal.control-in-output.ejs",
+              "invalid.illegal.wrong-include.ejs",
+              "invalid.illegal.missing-equals.ejs",
               "invalid.illegal.missing-equals.begin.ejs",
               "invalid.illegal.missing-equals.end.ejs",
-              "variable.other.missing-equals.ejs"
+              "variable.other.missing-equals.ejs",
+              "invalid.illegal.orphan-close.ejs"
             ],
             "settings": {
               "foreground": "#ff4757",

@@ -2,84 +2,110 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8" />
-        <title>Muestra Completa de Etiquetas EJS</title>
+        <title>Muestra Completa: Uso Correcto vs Incorrecto en EJS</title>
     </head>
 
     <body>
-        <!-- ===================================================================== -->
-        <!-- 1. COMPARATIVA DE COMENTARIOS (HTML vs EJS vs JS)                     -->
-        <!-- Todos se ven exactamente con el mismo color de comentario del tema    -->
-        <!-- ===================================================================== -->
-
-        <!-- Comentario HTML estándar: enviado en el código fuente al navegador -->
-        <%# Comentario de servidor EJS: oculto al navegador, mismo color que el de HTML %>
-        <%#
-            Comentario EJS multilínea:
-            Conserva el color de comentario tanto en <%# como en el texto y en %>
-        -%>
-
         <main>
-            <!-- ================================================================= -->
-            <!-- 2. SALIDA ESCAPADA (<%= ... %>) vs '=' OLVIDADO (<% ... %>)       -->
-            <!--    - Con '=': <% en Verde Lima + '=' y '%>' en Cian Brillante     -->
-            <!--    - Sin '=' (error típico): Se ilumina en ROJO SUBRAYADO         -->
-            <!-- ================================================================= -->
-            <div class="comparativa-error">
-                <p><strong>Duración (Correcto con =):</strong> <span><%= pelicula.Runtime %></span></p>
-                <p><strong>Género (ERROR: falta el =):</strong> <span><% pelicula.Genre %></span></p>
-                <p><strong>Director (Correcto con =):</strong> <span><%= pelicula.Director %></span></p>
-            </div>
+            <!-- ===================================================================== -->
+            <!-- 1. ETIQUETA DE SALIDA ESCAPADA (<%= ... %>)                           -->
+            <!--    Correcto: <% y %> en Verde Lima (#a3e635) + '=' en Cian (#00f5d4)  -->
+            <!-- ===================================================================== -->
+            <section>
+                <!-- USO CORRECTO -->
+                <p><strong>Título:</strong> <span><%= pelicula.Title %></span></p>
+                <p><strong>Ternario:</strong> <span><%= pelicula.Year >= 2000 ? 'Moderna' : 'Clásica' %></span></p>
+                <img class="film-poster" src="<%= pelicula.Poster %>" alt="Póster de <%= pelicula.Title %>" />
 
-            <!-- ================================================================= -->
-            <!-- 3. SALIDA EN ATRIBUTOS HTML (<%= ... %>)                          -->
-            <!-- ================================================================= -->
-            <h1>Resultados para: <%= filmSearch %></h1>
-            <img class="film-poster" src="<%= pelicula.Poster %>" alt="Póster de <%= pelicula.Title %>" />
+                <!-- USOS INCORRECTOS (Se iluminan en ROJO SUBRAYADO) -->
+                <p><strong>Error 1 (Falta el '='):</strong> <span><% pelicula.Genre %></span></p>
+                <p><strong>Error 2 (Etiqueta vacía):</strong> <span><%= %></span></p>
+                <p><strong>Error 3 (Doble '=='):</strong> <span><%== pelicula.Title %></span></p>
+                <p><strong>Error 4 (Meter un 'if' dentro de '<%='):</strong> <%= if (peliculas.length > 0) { %></p>
+                <p><strong>Error 5 (Meter 'forEach' dentro de '<%='):</strong> <%= peliculas.forEach(function(p) { %></p>
+                <p><strong>Error 6 (Meter cierre '}' dentro de '<%='):</strong> <%= } %></p>
+            </section>
 
-            <!-- ================================================================= -->
-            <!-- 4. SALIDA SIN ESCAPAR / RAW HTML (<%- ... %>)                     -->
-            <!--    - <% en Verde Lima + '-' y '%>' en Naranja Ámbar (#fb923c)     -->
-            <!-- ================================================================= -->
-            <%- include('partials/header', { titulo: 'Catálogo' }) %>
-            <div class="raw-html"><%- pelicula.HtmlDescription %></div>
+            <!-- ===================================================================== -->
+            <!-- 2. ETIQUETA DE SALIDA SIN ESCAPAR / INCLUDE (<%- ... %>)              -->
+            <!--    Correcto: <% y %> en Verde Lima (#a3e635) + '-' en Naranja         -->
+            <!-- ===================================================================== -->
+            <section>
+                <!-- USO CORRECTO -->
+                <%- include('partials/header', { titulo: 'Catálogo' }) %>
+                <div class="raw-html"><%- pelicula.HtmlDescription %></div>
 
-            <!-- ================================================================= -->
-            <!-- 5. SCRIPTLETS DE CONTROL (<% ... %>)                              -->
-            <!--    - Apertura <% y cierre %> ambos en Verde Lima (#a3e635)        -->
-            <!-- ================================================================= -->
-            <% if (peliculas.length > 0) { %>
-                <% peliculas.forEach(function(pelicula, index) { %>
-                    <article class="film-card" data-index="<%= index %>">
-                        <h2><%= pelicula.Title %> (<%= pelicula.Year %>)</h2>
-                    </article>
-                <% }) %>
-            <% } else { %>
-                <p>No se encontraron películas.</p>
-            <% } %>
+                <!-- USOS INCORRECTOS (Se iluminan en ROJO SUBRAYADO) -->
+                <%= include('partials/header') %>
+                <% include('partials/header') %>
+                <%- %>
+                <%-= pelicula.HtmlDescription %>
+            </section>
 
-            <!-- ================================================================= -->
-            <!-- 6. RECORTE DE ESPACIOS (<%_ ... _%> y -%>)                        -->
-            <!--    - <% y %> en Verde Lima + '_' y '-' en Amarillo (#fde047)      -->
-            <!-- ================================================================= -->
-            <%_ const total = peliculas.length; _%>
-            <% if (total === 1) { -%>
-                <p>Se encontró exactamente 1 película.</p>
-            <% } -%>
+            <!-- ===================================================================== -->
+            <!-- 3. ETIQUETAS DE ESTRUCTURAS DE CONTROL (<% ... %>)                    -->
+            <!--    Correcto: <% y %> en Amarillo Eléctrico (#ffea00)                  -->
+            <!-- ===================================================================== -->
+            <section>
+                <!-- USO CORRECTO -->
+                <% if (peliculas.length > 0) { %>
+                    <% peliculas.forEach(function(pelicula, index) { %>
+                        <article class="film-card">
+                            <h2><%= pelicula.Title %></h2>
+                        </article>
+                    <% }) %>
+                <% } else { %>
+                    <p>No se encontraron resultados.</p>
+                <% } %>
 
-            <!-- ================================================================= -->
-            <!-- 7. ETIQUETAS LITERALES ESCAPADAS (<%% y %%>) -> Violeta/Lavanda   -->
-            <!-- ================================================================= -->
-            <p>Para imprimir una variable en EJS se escribe: <code><%%= nombreVariable %%></code></p>
+                <!-- USOS INCORRECTOS (Se iluminan en ROJO SUBRAYADO) -->
+                <<% if (peliculas.length > 0) { %>
+                <% %>
+                <% const x = 1 =%>
+                <p>Cierre huérfano sin apertura: pelicula.Title %></p>
+            </section>
 
-            <!-- ================================================================= -->
-            <!-- 8. SCRIPTLET MULTILÍNEA CON COMENTARIOS JS INTERNOS               -->
-            <!-- ================================================================= -->
-            <%
-                // Comentario de una línea en JS dentro de EJS
-                /* Comentario de bloque en JS dentro de EJS */
-                const valoracionMedia = 8.5;
-                const esDestacada = valoracionMedia >= 8.0;
-            %>
+            <!-- ===================================================================== -->
+            <!-- 4. ETIQUETAS DE RECORTE DE ESPACIO (<%_ ... _%> y -%>)                -->
+            <!--    Correcto: <% y %> en Amarillo + '_' y '-' en Cian Brillante        -->
+            <!-- ===================================================================== -->
+            <section>
+                <!-- USO CORRECTO -->
+                <%_ const total = peliculas.length; _%>
+                <% if (total === 1) { -%>
+                    <p>Exactamente 1 resultado.</p>
+                <% } -%>
+
+                <!-- USOS INCORRECTOS (Se iluminan en ROJO SUBRAYADO) -->
+                <%_ _%>
+                <%_ pelicula.Title _%>
+                <%=_ pelicula.Title %>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- 5. ETIQUETAS DE COMENTARIO (<%# ... %>)                               -->
+            <!--    Correcto: Mismo color de comentario que HTML (<!-- -->) y JS (//)  -->
+            <!-- ===================================================================== -->
+            <section>
+                <!-- Comentario HTML estándar -->
+                <%# USO CORRECTO: Comentario de servidor EJS con el mismo color que el de HTML %>
+                <%
+                    // Comentario JS de una línea dentro de scriptlet
+                    /* Comentario JS de bloque dentro de scriptlet */
+                    const activa = true;
+                %>
+
+                <!-- USO INCORRECTO: Anidar otra etiqueta <%= %> dentro de un comentario <%# %> (lo rompe en el primer %>) -->
+                <%# Comentario roto porque contiene <%= pelicula.Title %> dentro %>
+            </section>
+
+            <!-- ===================================================================== -->
+            <!-- 6. ETIQUETAS LITERALES ESCAPADAS (<%% y %%>)                          -->
+            <!--    Correcto: Violeta / Lavanda (#c084fc)                              -->
+            <!-- ===================================================================== -->
+            <section>
+                <p>Ejemplo de código en documentación: <code><%%= pelicula.Title %%></code></p>
+            </section>
         </main>
     </body>
 </html>

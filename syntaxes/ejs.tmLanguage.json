@@ -5,10 +5,28 @@
   "injectionSelector": "L:text.html -comment.block.html, L:string.quoted.double.html, L:string.quoted.single.html, L:meta.tag",
   "patterns": [
     {
+      "include": "#ejs-error-double-open"
+    },
+    {
+      "include": "#ejs-error-invalid-modifiers"
+    },
+    {
+      "include": "#ejs-error-empty-tag"
+    },
+    {
+      "include": "#ejs-error-nested-comment"
+    },
+    {
       "include": "#ejs-comment"
     },
     {
       "include": "#ejs-escaped-delimiter"
+    },
+    {
+      "include": "#ejs-error-control-in-output"
+    },
+    {
+      "include": "#ejs-error-wrong-include"
     },
     {
       "include": "#ejs-missing-equals-warning"
@@ -26,10 +44,33 @@
       "include": "#ejs-scriptlet-control"
     },
     {
+      "include": "#ejs-error-orphan-close"
+    },
+    {
       "include": "text.html.basic"
     }
   ],
   "repository": {
+    "ejs-error-double-open": {
+      "comment": "Detecta doble apertura accidental <<% por uso de snippets tras escribir <",
+      "name": "invalid.illegal.double-open.ejs",
+      "match": "(<<%[#=\\-_]?)([\\s\\S]*?)([-_]?%>)"
+    },
+    "ejs-error-invalid-modifiers": {
+      "comment": "Detecta modificadores duplicados o inválidos como <%==, <%-=, <%=_, <%-- o cierre =%>",
+      "name": "invalid.illegal.invalid-modifier.ejs",
+      "match": "(<%(?:==|--|=-|-=|=_|_=|##))([\\s\\S]*?)([-_]?%>)|(<%[#=\\-_]?)([^\\n]*?[^=!<>])(=%>)"
+    },
+    "ejs-error-empty-tag": {
+      "comment": "Detecta etiquetas EJS vacías sin expresión ni código: <% %>, <%= %>, <%- %>, <%_ %>",
+      "name": "invalid.illegal.empty-tag.ejs",
+      "match": "<%[#=\\-_]?\\s*[-_]?%>"
+    },
+    "ejs-error-nested-comment": {
+      "comment": "Detecta comentarios <%# que contienen otra etiqueta EJS anidada (se rompen en el primer %>)",
+      "name": "invalid.illegal.nested-comment.ejs",
+      "match": "<%#(?:(?!%>)[\\s\\S])*?<%[#=\\-_]?[\\s\\S]*?[-_]?%>[^\\n]*?[-_]?%>"
+    },
     "ejs-comment": {
       "name": "comment.block.ejs",
       "begin": "<%#",
@@ -49,21 +90,20 @@
       "name": "constant.character.escape.ejs",
       "match": "<%%|%%>"
     },
+    "ejs-error-control-in-output": {
+      "comment": "Detecta cuando se mete un bloque de control (if, else, for, forEach, switch, }, const, let) dentro de <%= o <%-",
+      "name": "invalid.illegal.control-in-output.ejs",
+      "match": "(<%[=\\-])(\\s*(?:(?:\\}\\s*)?(?:if|else|for|while|do|switch|case|default|break|continue|return|const|let|var|function|try|catch|finally|throw|class|debugger)\\b[\\s\\S]*?|\\}[\\s\\S]*?|[a-zA-Z_$][a-zA-Z0-9_$.]*\\.forEach\\s*\\([\\s\\S]*?))([-_]?%>)"
+    },
+    "ejs-error-wrong-include": {
+      "comment": "Detecta cuando se usa include() con <%= (escapa el HTML) o con <% (no imprime) en vez de <%- include()",
+      "name": "invalid.illegal.wrong-include.ejs",
+      "match": "(<%(?:=|_(?=\\s)|(?=\\s)))\\s*(include\\s*\\([\\s\\S]*?)([-_]?%>)"
+    },
     "ejs-missing-equals-warning": {
-      "comment": "Detecta cuando se olvida el signo = al imprimir una propiedad/variable, ej: <% pelicula.Genre %>",
-      "name": "meta.embedded.missing-equals.ejs",
-      "match": "(<%)(\\s+(?!if\\b|else\\b|for\\b|while\\b|do\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|return\\b|const\\b|let\\b|var\\b|function\\b|try\\b|catch\\b|finally\\b|throw\\b|delete\\b|typeof\\b|void\\b|yield\\b|await\\b|import\\b|export\\b|class\\b|debugger\\b)[a-zA-Z_$][a-zA-Z0-9_$]*(?:\\.[a-zA-Z_$][a-zA-Z0-9_$]*)*(?:\\[[a-zA-Z0-9_$'\"\\s]+\\])*\\s*)(%>)",
-      "captures": {
-        "1": {
-          "name": "invalid.illegal.missing-equals.begin.ejs"
-        },
-        "2": {
-          "name": "variable.other.missing-equals.ejs"
-        },
-        "3": {
-          "name": "invalid.illegal.missing-equals.end.ejs"
-        }
-      }
+      "comment": "Detecta cuando se olvida el signo = al imprimir una propiedad/variable/literal, ej: <% pelicula.Genre %>",
+      "name": "invalid.illegal.missing-equals.ejs",
+      "match": "(<%_?)(\\s+(?:(?!if\\b|else\\b|for\\b|while\\b|do\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|return\\b|const\\b|let\\b|var\\b|function\\b|try\\b|catch\\b|finally\\b|throw\\b|delete\\b|typeof\\b|void\\b|yield\\b|await\\b|import\\b|export\\b|class\\b|debugger\\b)[a-zA-Z_$][a-zA-Z0-9_$]*(?:\\.[a-zA-Z_$][a-zA-Z0-9_$]*)*(?:\\[[a-zA-Z0-9_$'\"\\s]+\\])*|\"[^\"]*\"|'[^']*'|\\d+(?:\\.\\d+)?)\\s*)([-_]?%>)"
     },
     "ejs-output-escaped": {
       "name": "meta.embedded.output.escaped.ejs",
@@ -181,6 +221,11 @@
           "include": "source.js"
         }
       ]
+    },
+    "ejs-error-orphan-close": {
+      "comment": "Detecta cierres %> huérfanos que no tienen etiqueta de apertura <%",
+      "name": "invalid.illegal.orphan-close.ejs",
+      "match": "[-_=]?%>"
     }
   }
 }
