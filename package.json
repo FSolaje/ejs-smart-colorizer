@@ -2,7 +2,7 @@
   "name": "ejs-smart-colorizer",
   "displayName": "EJS Smart Colorizer",
   "description": "Coloreador avanzado de etiquetas EJS para VS Code: salida (<%=) en Verde Lima + Cian, estructuras de control (<%) en Amarillo, detector completo de errores de uso en Rojo Subrayado, comentarios unificados con HTML/JS y snippets.",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "publisher": "fsolaje-tools",
   "license": "MIT",
   "engines": {

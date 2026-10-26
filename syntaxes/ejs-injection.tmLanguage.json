@@ -108,6 +108,7 @@
     },
     "ejs-output-escaped": {
       "name": "meta.embedded.output.escaped.ejs",
+      "contentName": "source.js",
       "begin": "(<%)(=)",
       "beginCaptures": {
         "1": {
@@ -137,6 +138,7 @@
     },
     "ejs-output-unescaped": {
       "name": "meta.embedded.output.unescaped.ejs",
+      "contentName": "source.js",
       "begin": "(<%)(-)",
       "beginCaptures": {
         "1": {
@@ -166,6 +168,7 @@
     },
     "ejs-scriptlet-slurp": {
       "name": "meta.embedded.scriptlet.slurp.ejs",
+      "contentName": "source.js",
       "begin": "(<%)(_)",
       "beginCaptures": {
         "1": {
@@ -195,6 +198,7 @@
     },
     "ejs-scriptlet-control": {
       "name": "meta.embedded.scriptlet.control.ejs",
+      "contentName": "source.js",
       "begin": "<%(?![#=_\\-%])",
       "beginCaptures": {
         "0": {
@@ -220,7 +224,7 @@
       ]
     },
     "ejs-js-interior": {
-      "comment": "Tokenizador JS plano que no abre bloques { } ni ( ) recursivos para jamás tragarse el cierre %>",
+      "comment": "Tokenizador JS plano con los scopes exactos de JavaScript.tmLanguage.json de VS Code para respetar al 100% el tema activo sin bloquear llaves { }",
       "patterns": [
         {
           "name": "comment.line.double-slash.js",
@@ -244,40 +248,180 @@
           "match": "`(?:\\\\.|(?![-_]?%>)[^`\\\\])*`"
         },
         {
-          "name": "keyword.control.js",
-          "match": "\\b(?:if|else|for|while|do|switch|case|default|break|continue|return|try|catch|finally|throw|await|yield|import|export|from)\\b"
+          "comment": "Declaración de función con sus parámetros (ej. function(pelicula, index))",
+          "match": "\\b(function)\\s*([a-zA-Z_$][a-zA-Z0-9_$]*)?\\s*(\\()([^()]*?)(\\))",
+          "captures": {
+            "1": {
+              "name": "storage.type.function.js"
+            },
+            "2": {
+              "name": "entity.name.function.js"
+            },
+            "3": {
+              "name": "punctuation.definition.parameters.begin.js"
+            },
+            "4": {
+              "name": "variable.parameter.js"
+            },
+            "5": {
+              "name": "punctuation.definition.parameters.end.js"
+            }
+          }
+        },
+        {
+          "comment": "Constantes declaradas con const (ej. const total = ...)",
+          "match": "\\b(const)\\s+([a-zA-Z_$][a-zA-Z0-9_$]*)",
+          "captures": {
+            "1": {
+              "name": "storage.type.js"
+            },
+            "2": {
+              "name": "variable.other.constant.js"
+            }
+          }
+        },
+        {
+          "name": "keyword.control.conditional.js",
+          "match": "\\b(?:if|else|switch|case|default)\\b"
+        },
+        {
+          "name": "keyword.control.loop.js",
+          "match": "\\b(?:for|while|do)\\b"
+        },
+        {
+          "name": "keyword.control.flow.js",
+          "match": "\\b(?:break|continue|return|try|catch|finally|throw|await|yield|import|export|from)\\b"
+        },
+        {
+          "name": "storage.type.function.arrow.js",
+          "match": "=>"
         },
         {
           "name": "storage.type.js",
-          "match": "\\b(?:const|let|var|function|class|async)\\b|=>"
+          "match": "\\b(?:const|let|var|function|class|async)\\b"
         },
         {
           "name": "keyword.operator.expression.js",
           "match": "\\b(?:new|typeof|instanceof|in|of|delete|void)\\b"
         },
         {
-          "name": "constant.language.js",
-          "match": "\\b(?:true|false|null|undefined|NaN|Infinity)\\b"
+          "name": "constant.language.boolean.js",
+          "match": "\\b(?:true|false)\\b"
         },
         {
-          "name": "constant.numeric.js",
+          "name": "constant.language.null.js",
+          "match": "\\b(?:null|undefined|NaN|Infinity)\\b"
+        },
+        {
+          "name": "constant.numeric.decimal.js",
           "match": "\\b\\d+(?:\\.\\d+)?\\b"
         },
         {
+          "name": "support.class.builtin.js",
+          "match": "\\b(?:Object|Array|String|Number|Boolean|Date|Math|JSON|RegExp|Promise|Error|Map|Set|Symbol|Intl)\\b"
+        },
+        {
+          "name": "support.type.object.console.js",
+          "match": "\\bconsole\\b"
+        },
+        {
+          "comment": "Propiedades nativas del lenguaje como .length, .prototype, .constructor, .name",
+          "match": "(\\.)(length|prototype|constructor|name|message|stack)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.accessor.js"
+            },
+            "2": {
+              "name": "support.variable.property.js"
+            }
+          }
+        },
+        {
+          "comment": "Métodos nativos de Array/String/Console invocados con punto (.forEach, .map, .filter, .includes, .log...)",
+          "match": "(\\.)(forEach|map|filter|reduce|find|findIndex|some|every|includes|indexOf|slice|splice|concat|join|push|pop|shift|unshift|sort|reverse|split|replace|replaceAll|trim|toLowerCase|toUpperCase|startsWith|endsWith|match|substring|charAt|keys|values|entries|log|error|warn|info)(?=\\s*\\()",
+          "captures": {
+            "1": {
+              "name": "punctuation.accessor.js"
+            },
+            "2": {
+              "name": "support.function.js"
+            }
+          }
+        },
+        {
+          "comment": "Cualquier otro método invocado sobre un objeto (ej. objeto.miMetodo())",
+          "match": "(\\.)([a-zA-Z_$][a-zA-Z0-9_$]*)(?=\\s*\\()",
+          "captures": {
+            "1": {
+              "name": "punctuation.accessor.js"
+            },
+            "2": {
+              "name": "entity.name.function.member.js"
+            }
+          }
+        },
+        {
+          "comment": "Funciones globales o de plantilla como include()",
           "name": "entity.name.function.js",
           "match": "\\b[a-zA-Z_$][a-zA-Z0-9_$]*(?=\\s*\\()"
         },
         {
-          "name": "variable.other.property.js",
-          "match": "(?<=\\.)[a-zA-Z_$][a-zA-Z0-9_$]*"
+          "comment": "Propiedades constantes en mayúsculas tras un punto (ej. Math.PI)",
+          "match": "(\\.)([A-Z_][A-Z0-9_]*)\\b",
+          "captures": {
+            "1": {
+              "name": "punctuation.accessor.js"
+            },
+            "2": {
+              "name": "variable.other.constant.property.js"
+            }
+          }
         },
         {
+          "comment": "Propiedades de objeto tras un punto (ej. pelicula.Title, pelicula.Poster)",
+          "match": "(\\.)([a-zA-Z_$][a-zA-Z0-9_$]*)",
+          "captures": {
+            "1": {
+              "name": "punctuation.accessor.js"
+            },
+            "2": {
+              "name": "variable.other.property.js"
+            }
+          }
+        },
+        {
+          "comment": "Objeto al que se accede mediante punto (ej. peliculas en peliculas.length o pelicula en pelicula.Title)",
+          "name": "variable.other.object.js",
+          "match": "\\b[a-zA-Z_$][a-zA-Z0-9_$]*(?=\\s*\\.)"
+        },
+        {
+          "comment": "Variables normales de lectura/escritura",
           "name": "variable.other.readwrite.js",
           "match": "\\b[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
         },
         {
-          "name": "keyword.operator.js",
-          "match": "===|!==|==|!=|>=|<=|&&|\\|\\||\\?\\?|\\+\\+|--|[+\\-*/%&|^!~<>?:=]"
+          "name": "keyword.operator.comparison.js",
+          "match": "===|!==|==|!="
+        },
+        {
+          "name": "keyword.operator.relational.js",
+          "match": ">=|<=|>|<"
+        },
+        {
+          "name": "keyword.operator.logical.js",
+          "match": "&&|\\|\\||\\?\\?|!"
+        },
+        {
+          "name": "keyword.operator.assignment.js",
+          "match": "\\+=|-=|\\*=|/=|="
+        },
+        {
+          "name": "keyword.operator.ternary.js",
+          "match": "[?:]"
+        },
+        {
+          "name": "keyword.operator.arithmetic.js",
+          "match": "\\+\\+|--|[+\\-*/%]"
         },
         {
           "name": "punctuation.brace.js",
