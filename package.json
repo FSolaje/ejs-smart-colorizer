@@ -2,7 +2,7 @@
   "name": "ejs-smart-colorizer",
   "displayName": "EJS Smart Colorizer",
   "description": "Coloreador avanzado de etiquetas EJS para VS Code: salida (<%=) en Verde Lima + Cian, estructuras de control (<%) en Amarillo, detector completo de errores de uso en Rojo Subrayado, comentarios unificados con HTML/JS y snippets.",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "publisher": "fsolaje-tools",
   "license": "MIT",
   "engines": {
@@ -30,7 +30,11 @@
       {
         "language": "ejs",
         "scopeName": "text.html.ejs",
-        "path": "./syntaxes/ejs.tmLanguage.json",
+        "path": "./syntaxes/ejs.tmLanguage.json"
+      },
+      {
+        "scopeName": "text.html.ejs.injection",
+        "path": "./syntaxes/ejs-injection.tmLanguage.json",
         "injectTo": [
           "text.html.derivative",
           "text.html.basic"
@@ -119,8 +123,7 @@
               "invalid.illegal.missing-equals.ejs",
               "invalid.illegal.missing-equals.begin.ejs",
               "invalid.illegal.missing-equals.end.ejs",
-              "variable.other.missing-equals.ejs",
-              "invalid.illegal.orphan-close.ejs"
+              "variable.other.missing-equals.ejs"
             ],
             "settings": {
               "foreground": "#ff4757",

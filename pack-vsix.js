@@ -129,7 +129,6 @@ function createZipArchive(entries) {
 
 function buildVsix() {
   const baseDir = __dirname;
-  // Eliminar archivos .vsix antiguos antes de generar el nuevo
   for (const f of fs.readdirSync(baseDir)) {
     if (f.endsWith(".vsix")) {
       fs.unlinkSync(path.join(baseDir, f));
@@ -154,6 +153,10 @@ function buildVsix() {
     {
       name: "extension/syntaxes/ejs.tmLanguage.json",
       data: fs.readFileSync(path.join(baseDir, "syntaxes/ejs.tmLanguage.json"))
+    },
+    {
+      name: "extension/syntaxes/ejs-injection.tmLanguage.json",
+      data: fs.readFileSync(path.join(baseDir, "syntaxes/ejs-injection.tmLanguage.json"))
     },
     {
       name: "extension/snippets/ejs.json",

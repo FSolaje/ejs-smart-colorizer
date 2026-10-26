@@ -1,0 +1,289 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "EJS Smart Injection",
+  "scopeName": "text.html.ejs.injection",
+  "injectionSelector": "L:text.html -comment.block, L:string.quoted.double.html, L:string.quoted.single.html",
+  "patterns": [
+    {
+      "include": "#ejs-all"
+    }
+  ],
+  "repository": {
+    "ejs-all": {
+      "patterns": [
+        {
+          "include": "#ejs-error-double-open"
+        },
+        {
+          "include": "#ejs-error-invalid-modifiers"
+        },
+        {
+          "include": "#ejs-error-empty-tag"
+        },
+        {
+          "include": "#ejs-error-nested-comment"
+        },
+        {
+          "include": "#ejs-comment"
+        },
+        {
+          "include": "#ejs-escaped-delimiter"
+        },
+        {
+          "include": "#ejs-error-control-in-output"
+        },
+        {
+          "include": "#ejs-error-wrong-include"
+        },
+        {
+          "include": "#ejs-missing-equals-warning"
+        },
+        {
+          "include": "#ejs-output-escaped"
+        },
+        {
+          "include": "#ejs-output-unescaped"
+        },
+        {
+          "include": "#ejs-scriptlet-slurp"
+        },
+        {
+          "include": "#ejs-scriptlet-control"
+        }
+      ]
+    },
+    "ejs-error-double-open": {
+      "comment": "Detecta doble apertura accidental <<% por uso de snippets tras escribir <",
+      "name": "invalid.illegal.double-open.ejs",
+      "match": "(<<%[#=\\-_]?)(?:(?!%>)[^\\n])*?([-_]?%>)"
+    },
+    "ejs-error-invalid-modifiers": {
+      "comment": "Detecta modificadores duplicados o inválidos como <%==, <%-=, <%=_, <%-- o cierre =%>",
+      "name": "invalid.illegal.invalid-modifier.ejs",
+      "match": "(<%(?:==|--|=-|-=|=_|_=|##))(?:(?!%>)[^\\n])*?([-_]?%>)|(<%[#=\\-_]?)(?:(?!%>)[^\\n])*?[^=!<>](=%>)"
+    },
+    "ejs-error-empty-tag": {
+      "comment": "Detecta etiquetas EJS vacías sin expresión ni código: <% %>, <%= %>, <%- %>, <%_ %>",
+      "name": "invalid.illegal.empty-tag.ejs",
+      "match": "<%[#=\\-_]?\\s*[-_]?%>"
+    },
+    "ejs-error-nested-comment": {
+      "comment": "Detecta comentarios <%# que contienen otra etiqueta EJS anidada en la misma línea",
+      "name": "invalid.illegal.nested-comment.ejs",
+      "match": "<%#(?:(?!%>)[^\\n])*?<%[#=\\-_]?(?:(?!%>)[^\\n])*?[-_]?%>(?:(?!%>)[^\\n])*?[-_]?%>"
+    },
+    "ejs-comment": {
+      "name": "comment.block.ejs",
+      "begin": "<%#",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.definition.comment.begin.ejs"
+        }
+      },
+      "end": "[-_]?%>",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.comment.end.ejs"
+        }
+      }
+    },
+    "ejs-escaped-delimiter": {
+      "name": "constant.character.escape.ejs",
+      "match": "<%%|%%>"
+    },
+    "ejs-error-control-in-output": {
+      "comment": "Detecta cuando se mete un bloque de control (if, else, for, forEach, switch, }, const, let) dentro de <%= o <%-",
+      "name": "invalid.illegal.control-in-output.ejs",
+      "match": "(<%[=\\-])(\\s*(?:(?:\\}\\s*)?(?:if|else|for|while|do|switch|case|default|break|continue|return|const|let|var|function|try|catch|finally|throw|class|debugger)\\b(?:(?!%>)[^\\n])*?|\\}(?:(?!%>)[^\\n])*?|[a-zA-Z_$][a-zA-Z0-9_$.]*\\.forEach\\s*\\((?:(?!%>)[^\\n])*?))([-_]?%>)"
+    },
+    "ejs-error-wrong-include": {
+      "comment": "Detecta cuando se usa include() con <%= (escapa el HTML) o con <% (no imprime) en vez de <%- include()",
+      "name": "invalid.illegal.wrong-include.ejs",
+      "match": "(<%(?:=|_(?=\\s)|(?=\\s)))\\s*(include\\s*\\((?:(?!%>)[^\\n])*?)([-_]?%>)"
+    },
+    "ejs-missing-equals-warning": {
+      "comment": "Detecta cuando se olvida el signo = al imprimir una propiedad/variable/literal, ej: <% pelicula.Genre %>",
+      "name": "invalid.illegal.missing-equals.ejs",
+      "match": "(<%_?)(\\s+(?:(?!if\\b|else\\b|for\\b|while\\b|do\\b|switch\\b|case\\b|default\\b|break\\b|continue\\b|return\\b|const\\b|let\\b|var\\b|function\\b|try\\b|catch\\b|finally\\b|throw\\b|delete\\b|typeof\\b|void\\b|yield\\b|await\\b|import\\b|export\\b|class\\b|debugger\\b)[a-zA-Z_$][a-zA-Z0-9_$]*(?:\\.[a-zA-Z_$][a-zA-Z0-9_$]*)*(?:\\[[a-zA-Z0-9_$'\"\\s]+\\])*|\"[^\"]*\"|'[^']*'|\\d+(?:\\.\\d+)?)\\s*)([-_]?%>)"
+    },
+    "ejs-output-escaped": {
+      "name": "meta.embedded.output.escaped.ejs",
+      "begin": "(<%)(=)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.section.embedded.begin.output.ejs"
+        },
+        "2": {
+          "name": "keyword.operator.output.escaped.ejs"
+        }
+      },
+      "end": "(?:(-)|(_))?(%>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.operator.whitespace.trim.ejs"
+        },
+        "2": {
+          "name": "keyword.operator.whitespace.slurp.ejs"
+        },
+        "3": {
+          "name": "punctuation.section.embedded.end.output.escaped.ejs"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#ejs-js-interior"
+        }
+      ]
+    },
+    "ejs-output-unescaped": {
+      "name": "meta.embedded.output.unescaped.ejs",
+      "begin": "(<%)(-)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.section.embedded.begin.output.ejs"
+        },
+        "2": {
+          "name": "keyword.operator.output.unescaped.ejs"
+        }
+      },
+      "end": "(?:(-)|(_))?(%>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.operator.whitespace.trim.ejs"
+        },
+        "2": {
+          "name": "keyword.operator.whitespace.slurp.ejs"
+        },
+        "3": {
+          "name": "punctuation.section.embedded.end.output.unescaped.ejs"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#ejs-js-interior"
+        }
+      ]
+    },
+    "ejs-scriptlet-slurp": {
+      "name": "meta.embedded.scriptlet.slurp.ejs",
+      "begin": "(<%)(_)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.section.embedded.begin.scriptlet.ejs"
+        },
+        "2": {
+          "name": "keyword.operator.whitespace.slurp.ejs"
+        }
+      },
+      "end": "(?:(-)|(_))?(%>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.operator.whitespace.trim.ejs"
+        },
+        "2": {
+          "name": "keyword.operator.whitespace.slurp.ejs"
+        },
+        "3": {
+          "name": "punctuation.section.embedded.end.scriptlet.ejs"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#ejs-js-interior"
+        }
+      ]
+    },
+    "ejs-scriptlet-control": {
+      "name": "meta.embedded.scriptlet.control.ejs",
+      "begin": "<%(?![#=_\\-%])",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.begin.scriptlet.ejs"
+        }
+      },
+      "end": "(?:(-)|(_))?(%>)",
+      "endCaptures": {
+        "1": {
+          "name": "keyword.operator.whitespace.trim.ejs"
+        },
+        "2": {
+          "name": "keyword.operator.whitespace.slurp.ejs"
+        },
+        "3": {
+          "name": "punctuation.section.embedded.end.scriptlet.ejs"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#ejs-js-interior"
+        }
+      ]
+    },
+    "ejs-js-interior": {
+      "comment": "Tokenizador JS plano que no abre bloques { } ni ( ) recursivos para jamás tragarse el cierre %>",
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.js",
+          "match": "//(?:(?![-_]?%>)[^\\n])*"
+        },
+        {
+          "name": "comment.block.js",
+          "begin": "/\\*",
+          "end": "\\*/|(?=[-_]?%>)"
+        },
+        {
+          "name": "string.quoted.single.js",
+          "match": "'(?:\\\\.|(?![-_]?%>)[^'\\\\\\n])*'"
+        },
+        {
+          "name": "string.quoted.double.js",
+          "match": "\"(?:\\\\.|(?![-_]?%>)[^\"\\\\\\n])*\""
+        },
+        {
+          "name": "string.template.js",
+          "match": "`(?:\\\\.|(?![-_]?%>)[^`\\\\])*`"
+        },
+        {
+          "name": "keyword.control.js",
+          "match": "\\b(?:if|else|for|while|do|switch|case|default|break|continue|return|try|catch|finally|throw|await|yield|import|export|from)\\b"
+        },
+        {
+          "name": "storage.type.js",
+          "match": "\\b(?:const|let|var|function|class|async)\\b|=>"
+        },
+        {
+          "name": "keyword.operator.expression.js",
+          "match": "\\b(?:new|typeof|instanceof|in|of|delete|void)\\b"
+        },
+        {
+          "name": "constant.language.js",
+          "match": "\\b(?:true|false|null|undefined|NaN|Infinity)\\b"
+        },
+        {
+          "name": "constant.numeric.js",
+          "match": "\\b\\d+(?:\\.\\d+)?\\b"
+        },
+        {
+          "name": "entity.name.function.js",
+          "match": "\\b[a-zA-Z_$][a-zA-Z0-9_$]*(?=\\s*\\()"
+        },
+        {
+          "name": "variable.other.property.js",
+          "match": "(?<=\\.)[a-zA-Z_$][a-zA-Z0-9_$]*"
+        },
+        {
+          "name": "variable.other.readwrite.js",
+          "match": "\\b[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+        },
+        {
+          "name": "keyword.operator.js",
+          "match": "===|!==|==|!=|>=|<=|&&|\\|\\||\\?\\?|\\+\\+|--|[+\\-*/%&|^!~<>?:=]"
+        },
+        {
+          "name": "punctuation.brace.js",
+          "match": "[{}()\\[\\].,;]"
+        }
+      ]
+    }
+  }
+}

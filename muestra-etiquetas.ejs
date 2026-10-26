@@ -18,12 +18,12 @@
                 <img class="film-poster" src="<%= pelicula.Poster %>" alt="Póster de <%= pelicula.Title %>" />
 
                 <!-- USOS INCORRECTOS (Se iluminan en ROJO SUBRAYADO) -->
-                <p><strong>Error 1 (Falta el '='):</strong> <span><% pelicula.Genre %></span></p>
+                <p><strong>Error 1 (Falta el signo igual):</strong> <span><% pelicula.Genre %></span></p>
                 <p><strong>Error 2 (Etiqueta vacía):</strong> <span><%= %></span></p>
-                <p><strong>Error 3 (Doble '=='):</strong> <span><%== pelicula.Title %></span></p>
-                <p><strong>Error 4 (Meter un 'if' dentro de '<%='):</strong> <%= if (peliculas.length > 0) { %></p>
-                <p><strong>Error 5 (Meter 'forEach' dentro de '<%='):</strong> <%= peliculas.forEach(function(p) { %></p>
-                <p><strong>Error 6 (Meter cierre '}' dentro de '<%='):</strong> <%= } %></p>
+                <p><strong>Error 3 (Doble igual):</strong> <span><%== pelicula.Title %></span></p>
+                <p><strong>Error 4 (Meter un if en etiqueta de salida):</strong> <%= if (peliculas.length > 0) { %></p>
+                <p><strong>Error 5 (Meter forEach en etiqueta de salida):</strong> <%= peliculas.forEach(function(p) { %></p>
+                <p><strong>Error 6 (Meter cierre de llave en salida):</strong> <%= } %></p>
             </section>
 
             <!-- ===================================================================== -->
@@ -62,7 +62,6 @@
                 <<% if (peliculas.length > 0) { %>
                 <% %>
                 <% const x = 1 =%>
-                <p>Cierre huérfano sin apertura: pelicula.Title %></p>
             </section>
 
             <!-- ===================================================================== -->
@@ -95,7 +94,7 @@
                     const activa = true;
                 %>
 
-                <!-- USO INCORRECTO: Anidar otra etiqueta <%= %> dentro de un comentario <%# %> (lo rompe en el primer %>) -->
+                <!-- USO INCORRECTO: Anidar otra etiqueta EJS dentro de un comentario (se rompe en el primer cierre) -->
                 <%# Comentario roto porque contiene <%= pelicula.Title %> dentro %>
             </section>
 
