@@ -2,7 +2,7 @@
   "name": "ejs-smart-colorizer",
   "displayName": "EJS Smart Colorizer",
   "description": "Coloreador avanzado de etiquetas EJS para VS Code con diferenciación entre salida (<%=) y control (<%), detector de '=' olvidado (<% pelicula.Genre %>), comentarios unificados con HTML/JS y snippets.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "fsolaje-tools",
   "license": "MIT",
   "engines": {
@@ -13,11 +13,26 @@
     "Snippets"
   ],
   "contributes": {
+    "languages": [
+      {
+        "id": "ejs",
+        "extensions": [
+          ".ejs"
+        ],
+        "aliases": [
+          "EJS",
+          "ejs"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
     "grammars": [
       {
-        "scopeName": "text.html.ejs.smart",
+        "language": "ejs",
+        "scopeName": "text.html.ejs",
         "path": "./syntaxes/ejs.tmLanguage.json",
         "injectTo": [
+          "text.html.derivative",
           "text.html.basic"
         ]
       }
@@ -33,9 +48,6 @@
       }
     ],
     "configurationDefaults": {
-      "files.associations": {
-        "*.ejs": "html"
-      },
       "emmet.includeLanguages": {
         "ejs": "html"
       },

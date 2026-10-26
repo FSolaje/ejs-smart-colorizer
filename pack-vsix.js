@@ -129,6 +129,13 @@ function createZipArchive(entries) {
 
 function buildVsix() {
   const baseDir = __dirname;
+  // Eliminar archivos .vsix antiguos antes de generar el nuevo
+  for (const f of fs.readdirSync(baseDir)) {
+    if (f.endsWith(".vsix")) {
+      fs.unlinkSync(path.join(baseDir, f));
+    }
+  }
+
   const entries = [
     { name: "[Content_Types].xml", data: CONTENT_TYPES_XML },
     { name: "extension.vsixmanifest", data: VSIX_MANIFEST_XML },
@@ -139,6 +146,10 @@ function buildVsix() {
     {
       name: "extension/README.md",
       data: fs.readFileSync(path.join(baseDir, "README.md"))
+    },
+    {
+      name: "extension/language-configuration.json",
+      data: fs.readFileSync(path.join(baseDir, "language-configuration.json"))
     },
     {
       name: "extension/syntaxes/ejs.tmLanguage.json",
@@ -158,4 +169,3 @@ function buildVsix() {
 }
 
 buildVsix();
-

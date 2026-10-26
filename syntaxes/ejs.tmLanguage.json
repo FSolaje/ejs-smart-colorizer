@@ -1,8 +1,8 @@
 {
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-  "name": "EJS Smart Colorizer Injection",
-  "scopeName": "text.html.ejs.smart",
-  "injectionSelector": "L:text.html.basic -comment.block.html, L:string.quoted.double.html, L:string.quoted.single.html, L:meta.tag, L:text.html.ejs",
+  "name": "EJS Smart Colorizer",
+  "scopeName": "text.html.ejs",
+  "injectionSelector": "L:text.html -comment.block.html, L:string.quoted.double.html, L:string.quoted.single.html, L:meta.tag",
   "patterns": [
     {
       "include": "#ejs-comment"
@@ -24,6 +24,9 @@
     },
     {
       "include": "#ejs-scriptlet-control"
+    },
+    {
+      "include": "text.html.basic"
     }
   ],
   "repository": {
